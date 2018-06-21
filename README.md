@@ -28,7 +28,7 @@ Input json format:
 ```
 
 ## update exist agent
-Iutput json format:
+Input json format:
 ```json
 {
 	"system_id":12312,
