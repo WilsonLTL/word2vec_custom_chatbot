@@ -6,9 +6,6 @@ Flask 0.12.1 <br >
 textrank4zh 0.3 <br >
 gensim 3.4.0 <br >
 
-## api link
-https://uat-sub-agaent.azurewebsites.net/sub_agent?system_id=1&text=流鼻血做咩好
-
 ## create new agent
 Input json format:
 ```json
