@@ -126,4 +126,4 @@ def api_delete_article_en():
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host="172.31.8.136", port=5000)
