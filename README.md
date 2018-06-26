@@ -50,6 +50,7 @@ Input json format:
 
 ## get_result
 Url link:/sub_agent
+Cost : 2000ms > in first time,then 1000ms >
 Input json format:
 ```json
 {
@@ -188,3 +189,5 @@ Url link:/delete_agent
     "agent_id":12312
 }
 ```
+
+## english version

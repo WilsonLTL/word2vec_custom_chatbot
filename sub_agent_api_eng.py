@@ -2,14 +2,32 @@
 from gensim import models
 from textrank4zh import TextRank4Keyword
 import github.config as config,random
+import github.text_similarity as ts
+from summa import keywords
 from firebase import firebase
 fb = firebase.FirebaseApplication(config.CUSTOM_ACCESS_URL, None)
 
+testing = {
+        "system_id":12312,
+        "agents":[{
+                "agent_ID": 1290378912,
+                "agent_name": "firstaid",
+                 "intents": [
+                    {
+                      "intent_name": "first_aaid",
+                      "training_phrases": [
+                        "Nosebleeds","what should i do when nosebleeds"
+                      ],
+                      "response_text": ["首先,坐著，但別躺下,讓頭部高過心臟可以減少血流.之後,以拇指、食指一起由鼻翼往中間按壓至少5分鐘，張嘴呼吸,按壓約5分鐘後，如仍未止血，再繼續壓10分鐘."]
+                    }
+                  ]}]
+}
 
-def get_result(system_id,threshold,text,model):
-    result = get_user_db()
+
+def get_result(system_id,threshold,text):
     intent_response = "No any match value"
     intent_name = ""
+    result = get_user_db()
     intent_cost = 0
     entities_cost = 0
     num_count = 0
@@ -28,36 +46,30 @@ def get_result(system_id,threshold,text,model):
 
     for firebase_id in result:
         item = result[firebase_id]
-        if item["system_id"] == system_id:
-            d = item["agents"]
-            return_result["Agent"] = d[0]["agent_name"]
+    if item["system_id"] == system_id:
+        d = item["agents"]
+        print(item["agents"])
+        return_result["Agent"] = d[0]["agent_name"]
 
     try:
         # the default word_min_len is 1
         print("checking similar...")
-        user_input = TextRank4Keyword()
-        agent_entities = TextRank4Keyword()
-        user_input.analyze(text=text, lower=True, window=2)
-        for word in user_input.get_keywords(10, word_min_len=2):
+        for word in keywords.keywords(text):
             num_count += 1
+        print("num_count:",num_count)
 
         for intent in d[0]["intents"]:
+            intent_cost = 0
             for phrase in intent["training_phrases"]:
                 print("check phrase:" + phrase)
-                entities_cost = 0
-                agent_entities.analyze(text=phrase, lower=True, window=2)
-                for word in user_input.get_keywords(10, word_min_len=2):
-                    cost = 0
-                    for entities_item in agent_entities.get_keywords(10, word_min_len=2):
-                        res = model.similarity(str(word.word), str(entities_item.word))
-                        if res > cost:
-                            cost = res
-                    entities_cost += cost
-                    if entities_cost / num_count >= intent_cost:
-                        intent_cost = entities_cost / num_count
-                        intent_name = intent["intent_name"]
-                        intent_response = intent["response_text"]
-                return_result["Result"].append({"Intent":intent["intent_name"],"phrase":phrase,"Source":entities_cost / num_count})
+                print(text,":",phrase)
+                entities_cost = ts.sentence_similarity(text,phrase)
+                print(entities_cost)
+                if entities_cost >= intent_cost:
+                    intent_cost = entities_cost
+                    intent_name = intent["intent_name"]
+                    intent_response = intent["response_text"]
+                return_result["Result"].append({"Intent":intent["intent_name"],"phrase":phrase,"Source":entities_cost})
         if intent_cost < threshold:
             return_result["Success"] = False
         else:
@@ -193,7 +205,7 @@ def create_new_kits(system_id):
         result = {
             'system_id' : system_id
         }
-        result = fb.post('/sub_agent', result)
+        result = fb.post('/sub_agent_eng', result)
         return {"status":"success"}
     except Exception as ex:
         return {"status":"fail","exception":ex}
@@ -257,16 +269,15 @@ def delete_agent(system_id,agent_id):
 def update_db(result,firebase_id):
     try:
         print(firebase_id )
-        result = fb.put('/sub_agent', firebase_id,result)
+        result = fb.put('/sub_agent_eng', firebase_id,result)
         return {"status":"success"}
     except Exception as ex:
         print(ex)
         return {"status":"fail"}
 
-
 def create_agent_db(result):
     try:
-        result = fb.post('/sub_agent',result)
+        result = fb.post('/sub_agent_eng',result)
         return {"status":"success"}
     except Exception as ex:
         print(ex)
@@ -274,5 +285,5 @@ def create_agent_db(result):
 
 
 def get_user_db():
-    result = fb.get('/sub_agent', None)
+    result = fb.get('/sub_agent_eng', None)
     return result
