@@ -1,8 +1,8 @@
 # coding=UTF-8
 from gensim import models
 from textrank4zh import TextRank4Keyword
-import github.config as config,random
-import github.text_similarity as ts
+import config as config,random
+import text_similarity as ts
 from summa import keywords
 from firebase import firebase
 fb = firebase.FirebaseApplication(config.CUSTOM_ACCESS_URL, None)

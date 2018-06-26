@@ -191,3 +191,98 @@ Url link:/delete_agent
 ```
 
 ## english version
+
+## create new agent
+Url link:/create_agent_en
+Input json format:
+```json
+{
+	"system_id":12312,
+	"agent":[
+		{
+		"agent_ID": 1290378912,
+		"agent_name": "first_aid",
+         "intents": [
+            {
+              "intent_name": "first_aid_nosebleeds",
+              "training_phrases": [
+                "What should i do when nosebleeds","nosebleeds"
+                ],
+              "response_text": ["response_tect"]
+            }
+          ]
+		}]
+
+}
+```
+
+## update exist agent
+Url link:/update_agent_en
+Input json format:
+```json
+{
+	"system_id":12312,
+	"agent":[
+		{
+		"agent_ID": 1290378912,
+		"agent_name": "first_aid",
+         "intents": [
+            {
+              "intent_name": "first_aid_nosebleeds",
+              "training_phrases": [
+                "What should i do when nosebleeds","nosebleeds"
+                ],
+              "response_text": ["response_tect"]
+            }
+          ]
+		}]
+
+}
+```
+
+## get_result
+Url link:/sub_agent_en
+Cost : 2000ms > in first time,then 1000ms >
+Input json format:
+```json
+{
+	"system_id":12312,
+	"text":"what should i do when Nosebleeds"
+}
+```
+
+Output json format:
+```json
+{
+    "Agent": "first_aid",
+    "Intent": "first_aid_nosebleeds",
+    "ResolvedQuery": "what should i do when Nosebleeds",
+    "Responses": [
+        "response_text"
+    ],
+    "Result": [
+        {
+            "Intent": "first_aid_nosebleeds",
+            "Source": 1,
+            "phrase": "What should i do when nosebleeds"
+        },
+        {
+            "Intent": "first_aid_nosebleeds",
+            "Source": 1,
+            "phrase": "nosebleeds"
+        }
+    ],
+    "Score": 1,
+    "Speech": "response_text",
+    "Success": true,
+    "Threshold": 0.6
+}
+```
+## delete_agent
+Url link:/delete_agent
+```json
+{
+    "system_id":12312,
+    "agent_id":12312
+}
+```

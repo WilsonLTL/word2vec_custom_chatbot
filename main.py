@@ -1,8 +1,8 @@
 #coding=UTF-8
-import github.sub_agent_api as api_cn
-import github.sub_agent_api_eng as api_en
+import sub_agent_api as api_cn
+import sub_agent_api_eng as api_en
 from flask import Flask,jsonify,request
-import github.config as config
+import config as config
 app = Flask(__name__)
 
 

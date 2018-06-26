@@ -1,7 +1,7 @@
 # coding=UTF-8
 from gensim import models
 from textrank4zh import TextRank4Keyword
-import github.config as config,random
+import config as config,random
 from firebase import firebase
 fb = firebase.FirebaseApplication(config.CUSTOM_ACCESS_URL, None)
 
