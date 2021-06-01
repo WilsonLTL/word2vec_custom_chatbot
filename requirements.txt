@@ -27,5 +27,5 @@ six==1.11.0
 smart-open==1.5.7
 summa==1.0.0
 textrank4zh==0.3
-urllib3==1.23
+urllib3==1.26.5
 Werkzeug==0.14.1
